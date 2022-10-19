@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
 const TARGET_FPS = 60
-const ACCELERATION = 8
-const MAX_SPEED = 64
+const ACCELERATION = 12
+const MAX_SPEED = 84
 const FRICTION = 10
 const AIR_RESISTANCE = 1
 const GRAVITY = 4
@@ -50,7 +50,7 @@ func _physics_process(delta):
 
 
 func _on_Resetter_body_entered(body):
-	print(body)
+	#print(body)
 	if body.name == "LEVEL":
-		print("delete")
+		#print("delete")
 		body.queue_free()
