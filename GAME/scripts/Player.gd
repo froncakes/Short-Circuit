@@ -52,5 +52,8 @@ func _physics_process(delta):
 func _on_Resetter_body_entered(body):
 	#print(body)
 	if body.name == "LEVEL":
-		#print("delete")
-		body.queue_free()
+		print("delete")
+		body.get_parent().queue_free()
+	if body.name == "Text":
+		print("delete")
+		body.get_parent().queue_free()
