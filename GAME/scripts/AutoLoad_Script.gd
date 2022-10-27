@@ -1,6 +1,6 @@
 extends Node
 
-var LEVEL_SPEED = .75
+var LEVEL_SPEED = .5
 var LEVEL_LENGTH = 0
 var LEVEL_POSITION = Vector2(0, 0)
 var LEVEL_NUMBER = 0

@@ -1,31 +1,40 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://GAME/art/ARCADECLASSIC.TTF" type="DynamicFontData" id=1]
-[ext_resource path="res://GAME/scripts/Text.gd" type="Script" id=2]
+[ext_resource path="res://GAME/text_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://GAME/art/wasd.png" type="Texture" id=3]
+[ext_resource path="res://GAME/art/arrowkeys.png" type="Texture" id=4]
+[ext_resource path="res://GAME/art/spacebar.png" type="Texture" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 10, 8 )
-
-[sub_resource type="DynamicFont" id=2]
-size = 12
-font_data = ExtResource( 1 )
+extents = Vector2( 5, 8 )
 
 [node name="Text_1" type="Node2D"]
 
 [node name="Text" type="StaticBody2D" parent="."]
-script = ExtResource( 2 )
+
+[node name="Spacebar" type="Sprite" parent="Text"]
+position = Vector2( 72, 32 )
+texture = ExtResource( 5 )
+
+[node name="Wasd" type="Sprite" parent="Text"]
+position = Vector2( 104, -8 )
+texture = ExtResource( 3 )
+
+[node name="Arrowkeys" type="Sprite" parent="Text"]
+position = Vector2( 32, -8 )
+texture = ExtResource( 4 )
 
 [node name="Text_Coll" type="CollisionShape2D" parent="Text"]
-position = Vector2( 104, 8 )
+position = Vector2( 195, -96 )
 shape = SubResource( 1 )
 
 [node name="Label" type="Label" parent="Text"]
-margin_top = -8.0
-margin_right = 115.0
-margin_bottom = 21.0
-custom_fonts/font = SubResource( 2 )
-text = "wasd or  arrow  keys
-to  move"
+margin_left = 144.0
+margin_top = 8.0
+margin_right = 202.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 1 )
+text = "to  move"
 __meta__ = {
 "_edit_use_anchors_": false
 }
