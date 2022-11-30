@@ -25,14 +25,14 @@ position = Vector2( 32, -8 )
 texture = ExtResource( 4 )
 
 [node name="Text_Coll" type="CollisionShape2D" parent="Text"]
-position = Vector2( 195, -96 )
+position = Vector2( 210, -95 )
 shape = SubResource( 1 )
 
 [node name="Label" type="Label" parent="Text"]
 margin_left = 144.0
-margin_top = 8.0
+margin_top = -7.0
 margin_right = 202.0
-margin_bottom = 25.0
+margin_bottom = 10.0
 custom_fonts/font = ExtResource( 1 )
 text = "to  move"
 __meta__ = {

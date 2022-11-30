@@ -28,16 +28,15 @@ func _physics_process(delta):
 	_update_wall_direction()
 	#print(wall_sliding)
 	if x_input != 0:
-		#print ("run")
 		motion.x += x_input * ACCELERATION * delta * TARGET_FPS
 		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
 		#sprite.flip_h = x_input < 0
 		move_direction = x_input
-		#animationPlayer.play("Run")
+		sprite.animation = "Run"
 	else:
 		pass
 		#print ("stand")
-		#animationPlayer.play("Stand")
+		sprite.animation = "Idle"
 	
 	motion.y += GRAVITY * delta * TARGET_FPS
 	
@@ -45,9 +44,9 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("ui_up"):
 			motion.y = -JUMP_FORCE
 			motion.x = JUMP_FORCE * -wall_direction
-			#animationPlayer.play("Jump")
+			sprite.animation = "Jump"
 	
-	if is_on_floor() or coyote_jump == true:
+	if is_on_floor():
 		if x_input == 0:
 			motion.x = lerp(motion.x, 0, FRICTION * delta)
 		
@@ -55,9 +54,11 @@ func _physics_process(delta):
 			motion.y = -JUMP_FORCE
 			buffered_jump = false
 	else:
-		pass
+		if coyote_jump == true:
+			if Input.is_action_just_pressed("ui_up"):
+				motion.y = -JUMP_FORCE
 		#print("jump")
-		#animationPlayer.play("Jump")
+		sprite.animation = "Jump"
 		
 		if Input.is_action_just_released("ui_up") and motion.y < -JUMP_FORCE/2:
 			motion.y = -JUMP_FORCE/2
@@ -95,9 +96,9 @@ func _update_wall_direction():
 
 func _wall_slide():
 	sprite.scale.x = -wall_direction
-	var max_motion = 96 if !Input.is_action_pressed("ui_down") else 96 * 6
+	var max_motion = 72 if !Input.is_action_pressed("ui_down") else 72 * 6
 	motion.y = min(motion.y, max_motion)
-	#animationPlayer.play("Wall_Slide")
+	sprite.animation = "Wall_Slide"
 
 
 func _coyote_jump():

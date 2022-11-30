@@ -10,7 +10,7 @@ extents = Vector2( 2.5, 4 )
 [node name="Text" type="StaticBody2D" parent="."]
 
 [node name="Text_Coll" type="CollisionShape2D" parent="Text"]
-position = Vector2( 128, -103 )
+position = Vector2( 151, -78 )
 shape = SubResource( 1 )
 
 [node name="Label" type="Label" parent="Text"]
