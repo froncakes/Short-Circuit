@@ -71,7 +71,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 7, 10.5 )
+extents = Vector2( 7, 11 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 8, 232 )
@@ -87,7 +87,7 @@ animation = "Idle"
 playing = true
 
 [node name="Coll" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -10.5 )
+position = Vector2( 0, -11 )
 shape = SubResource( 1 )
 
 [node name="Resetter" type="Area2D" parent="."]
@@ -111,14 +111,14 @@ one_shot = true
 [node name="RightSlide" type="RayCast2D" parent="."]
 position = Vector2( 7, -11 )
 rotation = -1.5708
-scale = Vector2( 1.6, 0.2 )
+scale = Vector2( 2, 0.2 )
 enabled = true
 cast_to = Vector2( 0, 10 )
 
 [node name="LeftSlide" type="RayCast2D" parent="."]
 position = Vector2( -7, -11 )
 rotation = 1.5708
-scale = Vector2( 1.6, 0.2 )
+scale = Vector2( 2, 0.2 )
 enabled = true
 cast_to = Vector2( 0, 10 )
 
