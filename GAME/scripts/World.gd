@@ -19,13 +19,13 @@ extends Node2D
 	#Level_Instance.position = Vector2(lposition + length, 0)
 	#call_deferred("add_child", Level_Instance)
 
-
+#kills player if they go below the camera
 func _on_Floor_body_entered(body):
 	if body.name == "Player":
 		AutoLoadScript._DEATH()
 		body.queue_free()
 
-
+#kills player if they go all the way to the left 
 func _on_Left_Wall_body_entered(body):
 	if body.name == "Player":
 		AutoLoadScript._DEATH()
