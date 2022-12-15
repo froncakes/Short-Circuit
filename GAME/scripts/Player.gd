@@ -43,12 +43,14 @@ func _physics_process(delta):
 	#gravity
 	motion.y += GRAVITY * delta * TARGET_FPS
 	
-	# wall jump
+	#wall jump
 	if wall_sliding == true:
 		if Input.is_action_just_pressed("ui_up"):
 			motion.y = -JUMP_FORCE
 			motion.x = JUMP_FORCE * -wall_direction
+			move_direction = -wall_direction
 			sprite.animation = "Jump"
+			_Jump()
 	
 	if is_on_floor():
 		#for slowing down after you are moving
@@ -66,6 +68,7 @@ func _physics_process(delta):
 		#for jumping
 		if Input.is_action_just_pressed("ui_up") or buffered_jump == true:
 			motion.y = -JUMP_FORCE
+			_Jump()
 			buffered_jump = false
 	else:
 		#if in air
@@ -75,6 +78,7 @@ func _physics_process(delta):
 		if coyote_jump == true:
 			if Input.is_action_just_pressed("ui_up"):
 				motion.y = -JUMP_FORCE
+				_Jump()
 		
 		sprite.animation = "Jump"
 		
@@ -106,6 +110,10 @@ func _physics_process(delta):
 	var just_left_ground = not is_on_floor() and was_on_floor 
 	if just_left_ground and motion.y >= 0:
 		_coyote_jump()
+	
+	#kills player if the death timer goes off
+	if AutoLoadScript.PLAYER_ALIVE == false:
+		queue_free()
 
 #for what wall to put the player on
 func _update_wall_direction():
@@ -123,6 +131,13 @@ func _wall_slide():
 	var max_motion = 72 if !Input.is_action_pressed("ui_down") else 72 * 6
 	motion.y = min(motion.y, max_motion)
 	sprite.animation = "Wall_Slide"
+
+#animation jump
+func _Jump():
+	if move_direction == 1:
+		animationPlayer.play("Jump")
+	if move_direction == -1:
+		animationPlayer.play("LJump")
 
 #coyote and buffer jump timers
 func _coyote_jump():
