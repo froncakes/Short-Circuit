@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
 const TARGET_FPS = 60
-const ACCELERATION = 12
-const MAX_SPEED = 84
-const FRICTION = 10
-const AIR_RESISTANCE = 1
-const GRAVITY = 4
-const JUMP_FORCE = 140
+var ACCELERATION = 12
+var MAX_SPEED = 84
+var FRICTION = 10
+var AIR_RESISTANCE = 1
+var GRAVITY = 4
+var JUMP_FORCE = 140
 
 var motion = Vector2.ZERO
 var buffered_jump = false
