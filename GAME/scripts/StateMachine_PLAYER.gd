@@ -4,15 +4,17 @@ var rng = RandomNumberGenerator.new()
 
 var floating = false
 var wall_detection = true
-
+var pogo_jumping = false
 var rocket_movement = false
+var reset_rotation = false
 
 func _ready():
 	add_state("normal")
 	add_state("roller_skates")
 	add_state("umbrella")
 	add_state("rocket_boost")
-	set_state(states.normal)
+	add_state("pogostick")
+	set_state(states.pogostick)
 	print (state)
 
 func _state_logic(delta):
@@ -54,9 +56,10 @@ func _state_logic(delta):
 		parent.FRICTION = 10
 		parent.AIR_RESISTANCE = 1
 		parent.GRAVITY = 4
-		parent.JUMP_FORCE = 150
-		wall_detection = true
+		parent.JUMP_FORCE = 190
+		wall_detection = false
 		rocket_movement = false
+		parent.wall_sliding = false
 		
 		_base_movement(delta)
 		
@@ -83,6 +86,28 @@ func _state_logic(delta):
 		floating = false
 		
 		_base_movement(delta)
+	
+	#state logic for pogostick mode
+	if state == 4:
+		parent.ACCELERATION = 10
+		parent.MAX_SPEED = 72
+		parent.FRICTION = 10
+		parent.AIR_RESISTANCE = 1
+		parent.GRAVITY = 4
+		parent.JUMP_FORCE = 220
+		wall_detection = false
+		rocket_movement = false
+		parent.wall_sliding = false
+		floating = false
+		
+		if pogo_jumping == false:
+			parent.textureProgress.value = 0
+			reset_rotation = true
+		
+		if parent.textureProgress.value < 100:
+			parent.textureProgress.value += 2
+		
+		_base_movement(delta)
 
 func _get_transition(delta):
 	rng.randomize()
@@ -104,6 +129,9 @@ func _get_transition(delta):
 	if random_number == 3:
 		print("rocket boost")
 		return states.rocket_boost
+	if random_number == 4:
+		print("pogostick")
+		return states.pogostick
 	
 	return null
 
@@ -118,6 +146,8 @@ func _enter_state(new_state, old_state):
 			pass
 		states.rocket_boost:
 			pass
+		states.pogostick:
+			pass
 
 func _exit_state(old_state, new_state):
 	#likely using to play switch animation
@@ -127,18 +157,20 @@ func _base_movement(delta):
 	#puts value of left key versus right key and puts it in x_input
 	var x_input = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	
+	
 	parent._update_wall_direction()
 	
 	#detects x_input and makes the run animation and how fast the robot goes
 	if rocket_movement != true:
-		if x_input != 0:
-			parent.motion.x += x_input * parent.ACCELERATION * delta * parent.TARGET_FPS
-			parent.motion.x = clamp(parent.motion.x, -parent.MAX_SPEED, parent.MAX_SPEED)
-			parent.move_direction = x_input
-			parent.sprite.animation = "Run"
-		else:
-			#idles if no x_input detected
-			parent.sprite.animation = "Idle"
+		if state != 4:
+			if x_input != 0:
+				parent.motion.x += x_input * parent.ACCELERATION * delta * parent.TARGET_FPS
+				parent.motion.x = clamp(parent.motion.x, -parent.MAX_SPEED, parent.MAX_SPEED)
+				parent.move_direction = x_input
+				parent.sprite.animation = "Run"
+			else:
+				#idles if no x_input detected
+				parent.sprite.animation = "Idle"
 	else:
 		#detects x_input for rocket boost/car
 		if x_input > 0:
@@ -168,6 +200,9 @@ func _base_movement(delta):
 			parent._Jump()
 	
 	if parent.is_on_floor():
+		#reseting for pogostick
+		if reset_rotation == true and pogo_jumping == false:
+			parent.sprite.rotation = 0
 		#for slowing down after you are moving
 		if rocket_movement != true:
 			if x_input == 0:
@@ -182,10 +217,26 @@ func _base_movement(delta):
 			parent.landing = false
 		
 		#for jumping
-		if Input.is_action_just_pressed("ui_up") or parent.buffered_jump == true:
-			parent.motion.y = -parent.JUMP_FORCE
-			parent._Jump()
-			parent.buffered_jump = false
+		if state != 4:
+			if Input.is_action_just_pressed("ui_up") or parent.buffered_jump == true:
+				parent.motion.y = -parent.JUMP_FORCE
+				parent._Jump()
+				parent.buffered_jump = false
+		else: #pogostick jumping
+			if Input.is_action_just_pressed("ui_up"):
+				pogo_jumping = true
+				parent.textureProgress.visible = true
+			if Input.is_action_just_released("ui_up"):
+				pogo_jumping = false
+				parent.textureProgress.visible = false
+				parent.motion.y = -(parent.JUMP_FORCE * float(parent.textureProgress.value/100))
+		if pogo_jumping == true: #pogostick x input
+			if x_input > 0:
+				if parent.sprite.rotation < 1:
+					parent.sprite.rotation += .1
+			if x_input < 0:
+				if parent.sprite.rotation > -1:
+					parent.sprite.rotation -= .1
 	else:
 		#if in air
 		parent.landing = true
@@ -202,8 +253,9 @@ func _base_movement(delta):
 			parent.motion.y = -parent.JUMP_FORCE/2
 		
 		#calls buffers jump if you are in the air.
-		if Input.is_action_just_pressed("ui_up"):
-			parent._buffer_jump()
+		if state != 4:
+			if Input.is_action_just_pressed("ui_up"):
+				parent._buffer_jump()
 		
 		#for slowing down after you are moving but in air
 		if x_input == 0:
@@ -224,5 +276,6 @@ func _base_movement(delta):
 	
 	# for detecting if just left ground for coyote jump
 	var just_left_ground = not parent.is_on_floor() and was_on_floor 
-	if just_left_ground and parent.motion.y >= 0:
-		parent._coyote_jump()
+	if state != 4:
+		if just_left_ground and parent.motion.y >= 0:
+			parent._coyote_jump()
