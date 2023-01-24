@@ -836,10 +836,10 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 13/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 8, 96 )
+extents = Vector2( 8, 144 )
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 8, 96 )
+extents = Vector2( 8, 144 )
 
 [node name="Level_1" type="Node2D"]
 script = ExtResource( 2 )
@@ -864,18 +864,15 @@ tile_data = PoolIntArray( -65533, 11, 0, -65532, 11, 1, -65531, 11, 1, -65530, 1
 position = Vector2( 304, 0 )
 
 [node name="ExitColl" type="CollisionShape2D" parent="LEVEL/Exit"]
-position = Vector2( 8, 96 )
+position = Vector2( 8, 144 )
 shape = SubResource( 3 )
 
 [node name="Entrance" type="Area2D" parent="LEVEL"]
 position = Vector2( 8, 56 )
 
 [node name="EnterColl" type="CollisionShape2D" parent="LEVEL/Entrance"]
-position = Vector2( 0, 40 )
+position = Vector2( 0, 88 )
 shape = SubResource( 5 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [connection signal="body_exited" from="LEVEL/Exit" to="LEVEL" method="_on_Exit_body_exited"]
 [connection signal="body_entered" from="LEVEL/Entrance" to="LEVEL" method="_on_Entrance_body_entered"]
