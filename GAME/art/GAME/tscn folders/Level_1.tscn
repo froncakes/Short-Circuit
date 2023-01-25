@@ -836,10 +836,10 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 13/z_index = 0
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 8, 96 )
+extents = Vector2( 8, 144 )
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 8, 96 )
+extents = Vector2( 8, 144 )
 
 [node name="Level_1" type="Node2D"]
 script = ExtResource( 2 )

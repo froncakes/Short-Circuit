@@ -228,23 +228,15 @@ func _base_movement(delta):
 				parent.textureProgress.visible = true
 			if Input.is_action_just_released("ui_up"):
 				pogo_jumping = false
-				#calculates jump height and turns rotation into radians
-				var jump_height = -(parent.JUMP_FORCE * float(parent.textureProgress.value/100))
-				var jump_angle = deg2rad(parent.sprite.rotation_degrees)
-				if(jump_angle == 0): #so we dont divide by 0
-					parent.motion = Vector2(jump_angle, jump_height)
-				else: #math to jump with direction of angle
-					var vx = jump_height / sin(jump_angle)
-					parent.textureProgress.visible = false
-					parent.motion = Vector2(-vx, jump_height)
+				parent.textureProgress.visible = false
+				parent.motion.y = -(parent.JUMP_FORCE * float(parent.textureProgress.value/100))
 		if pogo_jumping == true: #pogostick x input
 			if x_input > 0:
-				if parent.sprite.rotation < 1.2:
+				if parent.sprite.rotation < 1:
 					parent.sprite.rotation += .1
 			if x_input < 0:
-				if parent.sprite.rotation > -1.2:
+				if parent.sprite.rotation > -1:
 					parent.sprite.rotation -= .1
-			#print('sprite rotation: ', parent.sprite.rotation_degrees)
 	else:
 		#if in air
 		parent.landing = true
