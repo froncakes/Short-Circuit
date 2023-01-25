@@ -93,12 +93,12 @@ func _state_logic(delta):
 	
 	#state logic for pogostick mode
 	if state == 4:
-		parent.ACCELERATION = 10
-		parent.MAX_SPEED = 72
-		parent.FRICTION = 50
+		parent.ACCELERATION = 1.10
+		parent.MAX_SPEED = 250
+		parent.FRICTION = 20
 		parent.AIR_RESISTANCE = 1
 		parent.GRAVITY = 4
-		parent.JUMP_FORCE = 220
+		parent.JUMP_FORCE = 235
 		wall_detection = false
 		rocket_movement = false
 		parent.wall_sliding = false
@@ -211,7 +211,7 @@ func _base_movement(delta):
 			parent.sprite.rotation = 0
 		#for slowing down after you are moving
 		if rocket_movement != true:
-			if x_input == 0:
+			if x_input == 0 or state == 4:
 				parent.motion.x = lerp(parent.motion.x, 0, parent.FRICTION * delta)
 		
 		#landing animation
@@ -221,6 +221,10 @@ func _base_movement(delta):
 			if parent.move_direction == -1:
 				parent.animationPlayer.play("LJump_Stretch")
 			parent.landing = false
+		
+		#cant transition while pogo jumping
+		if pogo_jumping == true:
+			able_transition = false
 		
 		#for jumping
 		if state != 4:
@@ -274,6 +278,11 @@ func _base_movement(delta):
 		if state != 4:
 			if Input.is_action_just_pressed("ui_up"):
 				parent._buffer_jump()
+		
+		if state == 4:
+			if x_input != 0:
+				parent.motion.x += x_input * parent.ACCELERATION * delta * parent.TARGET_FPS
+				parent.motion.x = clamp(parent.motion.x, -parent.MAX_SPEED, parent.MAX_SPEED)
 		
 		#for slowing down after you are moving but in air
 		if x_input == 0:

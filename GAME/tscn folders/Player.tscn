@@ -193,7 +193,7 @@ animations = [ {
 extents = Vector2( 7, 11 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 8, 232 )
+extents = Vector2( 8, 323.5 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 3
@@ -240,7 +240,7 @@ shape = SubResource( 1 )
 position = Vector2( -352, -8 )
 
 [node name="ResetterColl" type="CollisionShape2D" parent="Resetter"]
-position = Vector2( 0, -80 )
+position = Vector2( 0, 11.5 )
 shape = SubResource( 2 )
 __meta__ = {
 "_edit_lock_": true

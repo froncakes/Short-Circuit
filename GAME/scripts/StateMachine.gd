@@ -1,10 +1,13 @@
 extends Node2D
 class_name StateMachine
 
+var rng = RandomNumberGenerator.new()
+
 var state = null setget set_state
 var previous_state = null
 var states = {}
 var able_transition = true
+var next_state 
 
 onready var parent = get_parent()
 
@@ -44,3 +47,11 @@ func set_state(new_state):
 
 func add_state(state_name):
 	states[state_name] = states.size()
+
+func create_next_state():
+	rng.randomize()
+	var random_number = rng.randi_range(0, states.size()-1)
+	print (random_number)
+	
+	while random_number == state or random_number == previous_state:
+		random_number = rng.randi_range(0, states.size()-1)
