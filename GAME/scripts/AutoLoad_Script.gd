@@ -8,6 +8,7 @@ var SCORE = 0
 var PLAYER_ALIVE = true
 var NEXT_STATE
 var STORED_STATE
+var CHANGE_STORED = false
 
 var just_timed_out = false
 var timeouts = 0

@@ -19,6 +19,8 @@ func _ready():
 func _state_logic(delta):
 	if Input.is_action_just_pressed("ui_swap"):
 		swap_stored()
+	if AutoLoadScript.CHANGE_STORED == true:
+		set_stored(AutoLoadScript.STORED_STATE)
 	parent._death_timer()
 	
 	#state logic for normal mode

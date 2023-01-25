@@ -71,3 +71,8 @@ func swap_stored():
 	stored_state = NEXT
 	AutoLoadScript.NEXT_STATE = next_state
 	AutoLoadScript.STORED_STATE = stored_state
+
+func set_stored(powerup):
+	stored_state = powerup
+	
+	AutoLoadScript.STORED_STATE = stored_state
