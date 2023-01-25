@@ -4,18 +4,22 @@ class_name StateMachine
 var state = null setget set_state
 var previous_state = null
 var states = {}
+var able_transition = true
 
 onready var parent = get_parent()
 
 func _physics_process(delta):
 	if state != null:
 		_state_logic(delta)
-		if AutoLoadScript.just_timed_out == true:
+		if AutoLoadScript.just_timed_out == true and able_transition:
 			var transition = _get_transition(delta)
 			if transition != null:
 				set_state(transition)
 			print(state)
 			AutoLoadScript.just_timed_out = false
+			AutoLoadScript.timer.start()
+		elif AutoLoadScript.just_timed_out == true and able_transition == false:
+			AutoLoadScript.timer.stop()
 
 func _state_logic(delta):
 	pass

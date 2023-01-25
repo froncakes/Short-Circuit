@@ -49,4 +49,4 @@ func on_button_timeout() -> void:
 	timeouts = timeouts +1
 	just_timed_out = true
 	print("timed out")
-	timer.start()
+

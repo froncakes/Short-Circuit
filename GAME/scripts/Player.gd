@@ -22,7 +22,7 @@ onready var CoyoteJumpTimer = $CoyoteJumpTimer
 onready var LeftSlide = $LeftSlide
 onready var RightSlide = $RightSlide
 onready var animationPlayer = $AnimationPlayer
-onready var textureProgress = $TextureProgress
+onready var textureProgress = $Sprite/TextureProgress
 
 func _physics_process(delta):
 	pass

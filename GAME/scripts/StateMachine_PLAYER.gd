@@ -32,6 +32,7 @@ func _state_logic(delta):
 		wall_detection = true
 		rocket_movement = false
 		floating = false
+		pogo_jumping = false
 		
 		_base_movement(delta)
 	
@@ -46,6 +47,7 @@ func _state_logic(delta):
 		wall_detection = true
 		rocket_movement = false
 		floating = false
+		pogo_jumping = false
 		
 		_base_movement(delta)
 	
@@ -60,13 +62,14 @@ func _state_logic(delta):
 		wall_detection = false
 		rocket_movement = false
 		parent.wall_sliding = false
+		pogo_jumping = false
 		
 		_base_movement(delta)
 		
-		if Input.is_action_just_pressed("ui_up") and parent.coyote_jump == false and parent.landing == true and parent.wall_sliding == false:
+		if Input.is_action_just_pressed("ui_up") and parent.coyote_jump == false and parent.landing == true:
 			floating = true
 		
-		if Input.is_action_just_released("ui_up") and parent.coyote_jump == false and parent.landing == true and parent.wall_sliding == false:
+		if Input.is_action_just_released("ui_up") and parent.coyote_jump == false and parent.landing == true:
 			floating = false
 		
 		if floating == true:
@@ -84,6 +87,7 @@ func _state_logic(delta):
 		wall_detection = true
 		rocket_movement = true
 		floating = false
+		pogo_jumping = false
 		
 		_base_movement(delta)
 	
@@ -91,7 +95,7 @@ func _state_logic(delta):
 	if state == 4:
 		parent.ACCELERATION = 10
 		parent.MAX_SPEED = 72
-		parent.FRICTION = 10
+		parent.FRICTION = 50
 		parent.AIR_RESISTANCE = 1
 		parent.GRAVITY = 4
 		parent.JUMP_FORCE = 220
@@ -200,6 +204,8 @@ func _base_movement(delta):
 			parent._Jump()
 	
 	if parent.is_on_floor():
+		#makes it so ur able to transition while on floor
+		able_transition = true
 		#reseting for pogostick
 		if reset_rotation == true and pogo_jumping == false:
 			parent.sprite.rotation = 0
@@ -230,25 +236,29 @@ func _base_movement(delta):
 				pogo_jumping = false
 				#calculates jump height and turns rotation into radians
 				var jump_height = -(parent.JUMP_FORCE * float(parent.textureProgress.value/100))
-				var jump_angle = deg2rad(parent.sprite.rotation_degrees)
+				var jump_angle = parent.sprite.rotation
 				if(jump_angle == 0): #so we dont divide by 0
 					parent.motion = Vector2(jump_angle, jump_height)
+					parent.textureProgress.visible = false
 				else: #math to jump with direction of angle
-					var vx = jump_height / sin(jump_angle)
+					var vx = jump_height * sin(jump_angle)
+					print (vx)
 					parent.textureProgress.visible = false
 					parent.motion = Vector2(-vx, jump_height)
 		if pogo_jumping == true: #pogostick x input
 			if x_input > 0:
-				if parent.sprite.rotation < 1.2:
-					parent.sprite.rotation += .1
+				if parent.sprite.rotation < 1.25:
+					parent.sprite.rotation += .05
 			if x_input < 0:
-				if parent.sprite.rotation > -1.2:
-					parent.sprite.rotation -= .1
+				if parent.sprite.rotation > -1.25:
+					parent.sprite.rotation -= .05
 			#print('sprite rotation: ', parent.sprite.rotation_degrees)
 	else:
-		#if in air
+		#if in air for animation
 		parent.landing = true
 		parent.sprite.animation = "Jump"
+		#makes it so you cant transition while in the air
+		able_transition = false
 		
 		#coyote jump
 		if parent.coyote_jump == true:
@@ -270,13 +280,12 @@ func _base_movement(delta):
 			parent.motion.x = lerp(parent.motion.x, 0, parent.AIR_RESISTANCE * delta)
 	
 	#detecting if on wall
-	if wall_detection == true:
-		if parent.wall_direction != 0 and floating == false:
-			parent.wall_sliding = true
-			parent._wall_slide()
-		else:
-			parent.wall_sliding = false
-			parent.sprite.scale.x = parent.move_direction
+	if parent.wall_direction != 0 and floating == false and wall_detection == true:
+		parent.wall_sliding = true
+		parent._wall_slide()
+	else:
+		parent.wall_sliding = false
+		parent.sprite.scale.x = parent.move_direction
 	
 	var was_on_floor = parent.is_on_floor()
 	
