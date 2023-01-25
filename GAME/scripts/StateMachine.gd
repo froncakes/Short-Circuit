@@ -21,6 +21,7 @@ func _physics_process(delta):
 			print(state)
 			AutoLoadScript.just_timed_out = false
 			AutoLoadScript.timer.start()
+			create_next_state()
 		elif AutoLoadScript.just_timed_out == true and able_transition == false:
 			AutoLoadScript.timer.stop()
 
@@ -55,3 +56,6 @@ func create_next_state():
 	
 	while random_number == state or random_number == previous_state:
 		random_number = rng.randi_range(0, states.size()-1)
+	
+	next_state = random_number
+	AutoLoadScript.NEXT_STATE = next_state

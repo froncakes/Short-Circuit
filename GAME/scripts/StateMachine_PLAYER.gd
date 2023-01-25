@@ -1,7 +1,5 @@
 extends "res://GAME/scripts/StateMachine.gd"
 
-var rng = RandomNumberGenerator.new()
-
 var floating = false
 var wall_detection = true
 var pogo_jumping = false
@@ -15,6 +13,7 @@ func _ready():
 	add_state("rocket_boost")
 	add_state("pogostick")
 	set_state(states.pogostick)
+	create_next_state()
 	print (state)
 
 func _state_logic(delta):
@@ -114,26 +113,19 @@ func _state_logic(delta):
 		_base_movement(delta)
 
 func _get_transition(delta):
-	rng.randomize()
-	var random_number = rng.randi_range(0, states.size()-1)
-	print (random_number)
-	
-	while random_number == state or random_number == previous_state:
-		random_number = rng.randi_range(0, states.size()-1)
-	
-	if random_number == 0:
+	if next_state == 0:
 		print("normal")
 		return states.normal
-	if random_number == 1:
+	if next_state == 1:
 		print("roller skates")
 		return states.roller_skates
-	if random_number == 2:
+	if next_state == 2:
 		print("umbrella")
 		return states.umbrella
-	if random_number == 3:
+	if next_state == 3:
 		print("rocket boost")
 		return states.rocket_boost
-	if random_number == 4:
+	if next_state == 4:
 		print("pogostick")
 		return states.pogostick
 	
