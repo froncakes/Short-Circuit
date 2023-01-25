@@ -8,6 +8,7 @@ var previous_state = null
 var states = {}
 var able_transition = true
 var next_state 
+var stored_state = null
 
 onready var parent = get_parent()
 
@@ -59,3 +60,14 @@ func create_next_state():
 	
 	next_state = random_number
 	AutoLoadScript.NEXT_STATE = next_state
+
+func swap_stored():
+	var NEXT = next_state
+	if stored_state == null:
+		create_next_state()
+	else:
+		next_state = stored_state
+	
+	stored_state = NEXT
+	AutoLoadScript.NEXT_STATE = next_state
+	AutoLoadScript.STORED_STATE = stored_state

@@ -12,12 +12,13 @@ func _ready():
 	add_state("umbrella")
 	add_state("rocket_boost")
 	add_state("pogostick")
-	set_state(states.pogostick)
+	set_state(states.normal)
 	create_next_state()
 	print (state)
 
 func _state_logic(delta):
-	
+	if Input.is_action_just_pressed("ui_swap"):
+		swap_stored()
 	parent._death_timer()
 	
 	#state logic for normal mode
@@ -92,7 +93,7 @@ func _state_logic(delta):
 	
 	#state logic for pogostick mode
 	if state == 4:
-		parent.ACCELERATION = 1.10
+		parent.ACCELERATION = .50
 		parent.MAX_SPEED = 250
 		parent.FRICTION = 20
 		parent.AIR_RESISTANCE = 1
@@ -152,7 +153,6 @@ func _exit_state(old_state, new_state):
 func _base_movement(delta):
 	#puts value of left key versus right key and puts it in x_input
 	var x_input = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	
 	
 	parent._update_wall_direction()
 	

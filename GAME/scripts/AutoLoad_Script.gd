@@ -7,6 +7,7 @@ var LEVEL_NUMBER = 0
 var SCORE = 0
 var PLAYER_ALIVE = true
 var NEXT_STATE
+var STORED_STATE
 
 var just_timed_out = false
 var timeouts = 0
